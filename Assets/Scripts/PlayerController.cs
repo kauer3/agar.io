@@ -20,4 +20,11 @@ public class PlayerController : MonoBehaviour
     {
         transform.Translate(velocity);
     }
+
+    private void OnTriggerEnter(Collider triggerCollider)
+    {
+        Pickup pickup = triggerCollider.GetComponentInParent<Pickup>();
+        mass += pickup.mass;
+        Destroy(triggerCollider.gameObject);
+    }
 }
