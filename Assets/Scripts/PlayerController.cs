@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public float mass = 1;
     public float speed = 0.2f;
     Vector3 velocity;
+    new Camera camera;
 
     void Update()
     {
@@ -19,12 +20,18 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         transform.Translate(velocity);
+
     }
 
     private void OnTriggerEnter(Collider triggerCollider)
     {
-        Pickup pickup = triggerCollider.GetComponentInParent<Pickup>();
-        mass += pickup.mass;
-        Destroy(triggerCollider.gameObject);
+        if (triggerCollider.tag == "Pickup")
+        {
+            Pickup pickup = triggerCollider.GetComponentInParent<Pickup>();
+            mass += pickup.mass;
+            Destroy(triggerCollider.gameObject);
+            // calculate camera size relative to player size
+            Camera.main.orthographicSize = mass * 2;
+        }
     }
 }
