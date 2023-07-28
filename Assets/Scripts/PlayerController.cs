@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     public float speed = 0.2f;
     Vector3 velocity;
     public bool player1;
-    new Camera camera;
+    public new Camera camera;
 
     void Update()
     {
@@ -16,11 +16,6 @@ public class PlayerController : MonoBehaviour
         Vector3 input = player1 ? new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0) : new Vector3(Input.GetAxis("P2Horizontal"), Input.GetAxis("P2Vertical"), 0);
         Vector3 direction = input.normalized;
         velocity = direction * speed;
-    }
-
-    void Start()
-    {
-        camera = transform.GetComponentInChildren<Camera>();
     }
 
     private void FixedUpdate()
@@ -38,7 +33,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            PlayerController player = triggerCollider.GetComponentInParent<PlayerController>();
+            PlayerController player = triggerCollider.GetComponent<PlayerController>();
             if (mass > player.mass)
             {
                 mass += player.mass;

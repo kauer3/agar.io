@@ -320,6 +320,7 @@ MonoBehaviour:
   mass: 1
   speed: 0.2
   player1: 1
+  camera: {fileID: 519420031}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,6 +563,7 @@ MonoBehaviour:
   mass: 1
   speed: 0.2
   player1: 0
+  camera: {fileID: 1449480982}
 --- !u!1 &1449480979
 GameObject:
   m_ObjectHideFlags: 0
