@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Pickup
   - NPC
+  - NPCCollider
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Field Of Vision
   - Water
   - UI
   - 

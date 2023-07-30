@@ -10,10 +10,9 @@ public class NPC : MonoBehaviour
     public float speed = 0.2f;
     Vector3 velocity;
     public new Camera camera;
-    public Camera[] cameras;
     float timer = 0;
     float waitTime = 0;
-
+    private Camera[] cameras;
 
     // Make NPC follow other NPCs and players
     // Make NPC search for pickups
@@ -58,24 +57,27 @@ public class NPC : MonoBehaviour
 
     private void OnTriggerEnter(Collider triggerCollider)
     {
-        float objectMass = 0;
+        if (triggerCollider.gameObject.layer != 3)
+        {
+            float objectMass = 0;
 
-        if (triggerCollider.tag == "Pickup")
-        {
-            objectMass = triggerCollider.GetComponentInParent<Pickup>().mass;
-        }
-        else if (triggerCollider.tag == "Player")
-        {
-            objectMass = triggerCollider.GetComponentInParent<PlayerController>().mass;
-        }
-        else if (triggerCollider.tag == "NPC")
-        {
-            objectMass = triggerCollider.GetComponentInParent<NPC>().mass;
-        }
+            if (triggerCollider.tag == "Pickup")
+            {
+                objectMass = triggerCollider.GetComponentInParent<Pickup>().mass;
+            }
+            else if (triggerCollider.tag == "Player")
+            {
+                objectMass = triggerCollider.GetComponentInParent<PlayerController>().mass;
+            }
+            else if (triggerCollider.tag == "NPC")
+            {
+                objectMass = triggerCollider.GetComponentInParent<NPC>().mass;
+            }
 
-        if (objectMass > 0)
-        {
-            ManageCollision(triggerCollider.gameObject, objectMass, triggerCollider.tag);
+            if (objectMass > 0)
+            {
+                ManageCollision(triggerCollider.gameObject, objectMass, triggerCollider.tag);
+            }
         }
     }
 
@@ -85,29 +87,35 @@ public class NPC : MonoBehaviour
         {
             Destroy(collidedObject);
             mass += objectMass;
-            camera.orthographicSize = mass * 2;
+            camera.orthographicSize = mass * 3;
             transform.localScale = new Vector3(mass, mass, mass);
 
             if (type == "Player" || type == "NPC")
             {
-                bool hasEnabledCamera = cameras.Any(cam =>
-                {
-                    if (cam != null && cam.enabled)
-                    {
-                        if (type == "Player")
-                        {
-                            cam.rect = new Rect(0, 0, 1, 1);
-                        }
-                        return true;
-                    }
-                    return false;
-                });
-
-                if (!hasEnabledCamera)
-                {
-                    camera.enabled = true;
-                }
+                CheckForCameras(type);
             }
+        }
+    }
+
+    private void CheckForCameras(string type)
+    {
+        cameras = FindObjectsOfType<Camera>();
+        bool hasCamera = cameras.Any(camera =>
+        {
+            if (camera.enabled)
+            {
+                if (camera.transform.parent.tag == "Player" && type == "Player")
+                {
+                    camera.rect = new Rect(0, 0, 1, 1);
+                }
+                return true;
+            }
+            return false;
+        });
+
+        if (!hasCamera)
+        {
+            camera.enabled = true;
         }
     }
 }

@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider triggerCollider)
     {
+        // print collider component
+        // Debug.Log(triggerCollider);
+        // Debug.Log(Equals(triggerCollider, GetComponent<Collider>()));
         float objectMass = 0;
         bool isPlayer = false;
         if (triggerCollider.tag == "Pickup")
@@ -53,8 +56,14 @@ public class PlayerController : MonoBehaviour
         if (mass > objectMass)
         {
             mass += objectMass;
-            Destroy(collidedObject);
-            camera.orthographicSize = mass * 2;
+            if (collidedObject.tag == "NPCCollider")
+            {
+                Destroy(collidedObject.GetComponentInParent<NPC>().gameObject);
+            } else
+            {
+                Destroy(collidedObject);
+            }
+            camera.orthographicSize = mass * 3;
             if (isPlayer)
             {
                 camera.rect = new Rect(0, 0, 1, 1);
